@@ -12,17 +12,27 @@ def process_file(file_name):
     [["Mary","F",7065], ["Anna","F",2604],...]
 
     """
-    pass  # delete this line and replace with your code here
+    f = open('babynames'+'/'+ file_name)
+    name_details = [line.strip('\n').split(',') for line in f]
+    return name_details
 
 
-def total_births(year):
+def total_births(year, gender):
     """
-
     :param year: an integer, between 1880 and 2010
+    :param gender: a string, "F" or "M"
     :return: an integer, the total births of all the babies in that year
     """
-    pass  # delete this line and replace with your code here
+    births = 0
 
+    for i in get_year_list(year):
+        if gender == i[1]:
+            births += int(i[2])
+    return births
+
+def get_year_list(year):
+    year_string = str(year)
+    return process_file('yob' + year_string + '.txt')
 
 def proportion(name, gender, year):
     """
@@ -32,7 +42,9 @@ def proportion(name, gender, year):
     :param year: an integer, between 1880 and 2010
     :return: a floating number, the proportion of babies with the given name to total births in given year
     """
-    pass  # delete this line and replace with your code here
+    for i in get_year_list(year):
+        if i[0].lower() == name.lower() and i[1] == gender :
+            return int(i[2]) / total_births(year, gender)
 
 
 def highest_year(name, gender):
@@ -42,12 +54,18 @@ def highest_year(name, gender):
     :param gender: a string, "F" or "M"
     :return: an integer, the year when the given name has the highest proportion over the years (among all the proportions of the same name in different years)
     """
-    pass  # delete this line and replace with your code here
+    proportionList = {}
+    for year in range(1880, 2011):
+        p = proportion(name, gender, year)
+        if p:
+            proportionList[str(year)] = p
+
+    return max(proportionList, key=proportionList.get)
 
 
 def main():
-    pass  # delete this line and replace with your code here
-
+    print('My name had the highest proportion among females in the year:')
+    print(highest_year('Defne', 'F'))
 
 if __name__ == '__main__':
     main()
